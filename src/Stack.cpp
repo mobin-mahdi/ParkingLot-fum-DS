@@ -1,9 +1,7 @@
 #include "Stack.h"
 
-// ctor
 Stack::Stack(int cap) : topNode(nullptr), currentSize(0), capacity(cap) {}
 
-// dtor
 Stack::~Stack() {
     clear();
 }
@@ -63,6 +61,7 @@ void Stack::sort() {
     topNode = mergeSort(topNode);
 }
 
+// Find position from top (1 = top), return -1 if not found
 int Stack::findPosition(int carId) const {
     Car* current = topNode;
     int position = 1;
@@ -74,6 +73,7 @@ int Stack::findPosition(int carId) const {
     return -1;
 }
 
+// Free all nodes — called by destructor
 void Stack::clear() {
     Car* current = topNode;
     while (current != nullptr) {
@@ -100,6 +100,7 @@ Car* Stack::mergeSort(Car* head) {
     return sortedMerge(a, b);
 }
 
+// Split list into two halves using slow/fast pointer
 void Stack::splitList(Car* source, Car** frontRef, Car** backRef) {
     Car* slow = source;
     Car* fast = source->next;
@@ -117,6 +118,7 @@ void Stack::splitList(Car* source, Car** frontRef, Car** backRef) {
     slow->next = nullptr;
 }
 
+// Merge two sorted lists (ascending order)
 Car* Stack::sortedMerge(Car* a, Car* b) {
     if (!a) return b;
     if (!b) return a;
