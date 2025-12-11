@@ -1,20 +1,16 @@
 #include "Queue.h"
 #include <iostream>
 
-// Time Complexity: O(1)
 Queue::Queue() : frontNode(nullptr), rearNode(nullptr), currentSize(0) {}
 
-// Time Complexity: O(n)
 Queue::~Queue() {
     clear();
 }
 
-// Time Complexity: O(1)
 bool Queue::isEmpty() const {
     return frontNode == nullptr;
 }
 
-// Time Complexity: O(1)
 void Queue::enqueue(int carId) {
     Car* newCar = new Car(carId);
     if (isEmpty()) {
@@ -26,9 +22,6 @@ void Queue::enqueue(int carId) {
     ++currentSize;
 }
 
-
-
-// Time Complexity: O(1)
 bool Queue::dequeue(int &carId) {
     if (isEmpty()) {
         return false;
@@ -37,14 +30,13 @@ bool Queue::dequeue(int &carId) {
     carId = temp->carId;
     frontNode = frontNode->next;
     if (frontNode == nullptr) {
-        rearNode = nullptr;
+        rearNode = nullptr;  // Queue becomes empty
     }
     delete temp;
     --currentSize;
     return true;
 }
 
-// Time Complexity: O(1)
 bool Queue::front(int &carId) const {
     if (isEmpty()) {
         return false;
@@ -53,6 +45,7 @@ bool Queue::front(int &carId) const {
     return true;
 }
 
+// Search for car ID — used to prevent duplicates
 bool Queue::contains(int carId) const {
     Car* current = frontNode;
     while (current != nullptr) {
@@ -64,12 +57,10 @@ bool Queue::contains(int carId) const {
     return false;
 }
 
-// Time Complexity: O(1)
 int Queue::size() const {
     return currentSize;
 }
 
-// Time Complexity: O(n)
 void Queue::printQueue() const {
     Car* current = frontNode;
     std::cout << "Entrance Queue (front -> rear): ";
@@ -83,7 +74,7 @@ void Queue::printQueue() const {
     std::cout << std::endl;
 }
 
-// Time Complexity: O(n)
+// Free all nodes — called by destructor
 void Queue::clear() {
     Car* current = frontNode;
     while (current != nullptr) {
