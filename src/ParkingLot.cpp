@@ -1,7 +1,6 @@
 #include "ParkingLot.h"
 #include <iostream>
 
-// Time Complexity: O(n)
 ParkingLot::ParkingLot(int nStacks, int capacityPerStack)
     : numStacks(nStacks),
       stackCapacity(capacityPerStack) {
@@ -11,12 +10,10 @@ ParkingLot::ParkingLot(int nStacks, int capacityPerStack)
     }
 }
 
-// Time Complexity: O(1) (each Stack destructor frees its own memory)
 ParkingLot::~ParkingLot() {
     delete [] stacks;
 }
 
-// Time Complexity: O(1)
 bool ParkingLot::isValidStackIndex(int stackIndex) const {
     return stackIndex >= 1 && stackIndex <= numStacks;
 }
@@ -31,7 +28,6 @@ void ParkingLot::addCarToEntrance(int carId) {
     std::cout << "Car " << carId << " added to entrance queue.\n";
 }
 
-// Time Complexity: O(n)
 void ParkingLot::parkCarInFirstAvailableStack() {
     if (entranceQueue.isEmpty()) {
         std::cout << "Entrance queue is empty. No car to park.\n";
@@ -48,11 +44,10 @@ void ParkingLot::parkCarInFirstAvailableStack() {
         }
     }
 
-    // If we reach here, all stacks were full:
+    // All stacks full — car is lost (dequeued but not parked)
     std::cout << "Parking full. Car " << carId << " cannot be parked.\n";
 }
 
-// Time Complexity: O(1) for valid index; O(1) push
 void ParkingLot::parkCarInSpecificStack(int stackIndex) {
     if (!isValidStackIndex(stackIndex)) {
         std::cout << "Invalid stack index.\n";
@@ -69,7 +64,6 @@ void ParkingLot::parkCarInSpecificStack(int stackIndex) {
     Stack &target = stacks[stackIndex - 1];
     if (target.isFull()) {
         std::cout << "Selected stack is full. Car " << carId << " cannot be parked.\n";
-        // Optionally, push back to queue or handle differently if your teacher wants.
         return;
     }
 
@@ -77,7 +71,6 @@ void ParkingLot::parkCarInSpecificStack(int stackIndex) {
     std::cout << "Car " << carId << " parked in stack " << stackIndex << ".\n";
 }
 
-// Time Complexity: O(n * m)
 bool ParkingLot::findCar(int carId, int &stackIndex, int &position) const {
     for (int i = 0; i < numStacks; ++i) {
         int pos = stacks[i].findPosition(carId);
@@ -90,7 +83,6 @@ bool ParkingLot::findCar(int carId, int &stackIndex, int &position) const {
     return false;
 }
 
-// Time Complexity: O(1)
 bool ParkingLot::exitCarFromStackTop(int carId, int stackIndex) {
     if (!isValidStackIndex(stackIndex)) {
         std::cout << "Invalid stack index.\n";
@@ -118,17 +110,15 @@ bool ParkingLot::exitCarFromStackTop(int carId, int stackIndex) {
     return true;
 }
 
-// Time Complexity: O(k log k) where k is number of cars in stack
 void ParkingLot::sortStack(int stackIndex) {
     if (!isValidStackIndex(stackIndex)) {
         std::cout << "Invalid stack index.\n";
         return;
     }
-    stacks[stackIndex - 1].sort();
+    stacks[stackIndex - 1].sort();  // Uses merge sort (ascending)
     std::cout << "Stack " << stackIndex << " has been sorted by car ID.\n";
 }
 
-// Time Complexity: O(T) where T is number of cars moved + number of stacks visited
 void ParkingLot::moveBetweenStacks(int sourceIndex, int targetIndex) {
     if (!isValidStackIndex(sourceIndex) || !isValidStackIndex(targetIndex)) {
         std::cout << "Invalid stack index.\n";
@@ -148,6 +138,7 @@ void ParkingLot::moveBetweenStacks(int sourceIndex, int targetIndex) {
 
     int currentTarget = targetIndex - 1;
 
+    // Move as many cars as possible, spilling to next stacks if needed
     while (!source.isEmpty() && currentTarget < numStacks) {
         Stack &target = stacks[currentTarget];
 
@@ -171,7 +162,6 @@ void ParkingLot::moveBetweenStacks(int sourceIndex, int targetIndex) {
     }
 }
 
-// Time Complexity: O(n * m)
 void ParkingLot::printParkingLotState() const {
     std::cout << "======= Parking Lot State =======\n";
     std::cout << "Entrance Queue size: " << entranceQueue.size() << std::endl;
@@ -187,13 +177,12 @@ void ParkingLot::printParkingLotState() const {
     }
 }
 
+// Search queue + all stacks — used to prevent duplicate car IDs
 bool ParkingLot::carAlreadyInSystem(int carId) const {
-    // Check entrance queue
     if (entranceQueue.contains(carId)) {
         return true;
     }
 
-    // Check all stacks
     for (int i = 0; i < numStacks; ++i) {
         if (stacks[i].findPosition(carId) != -1) {
             return true;
@@ -202,14 +191,10 @@ bool ParkingLot::carAlreadyInSystem(int carId) const {
     return false;
 }
 
-// Time Complexity: O(1)
 int ParkingLot::getNumStacks() const {
     return numStacks;
 }
 
-// Time Complexity: O(1)
 int ParkingLot::getStackCapacity() const {
     return stackCapacity;
 }
-
-
