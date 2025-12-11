@@ -1,6 +1,5 @@
 #ifndef QUEUE_H
 #define QUEUE_H
-
 #include "Car.h"
 
 // Entrance queue implemented as a linked list of Car nodes.
